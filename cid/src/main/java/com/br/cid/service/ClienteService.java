@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.br.cid.enums.Genero;
 import com.br.cid.model.Cliente;
 import com.br.cid.model.Endereco;
 import com.br.cid.model.dto.EnderecoRequest;
@@ -57,6 +59,14 @@ public class ClienteService {
             System.out.println("error ao salvar endereco" + e.getMessage());
             return mv;
         }
+    }
+
+    public ModelAndView Cadastro(Cliente cliente) {
+        ModelAndView mv = new ModelAndView("cliente/cadastro");
+        mv.addObject("cliente", new Cliente());
+        Genero[] generos = {Genero.MASCULINO, Genero.FEMININO, Genero.OUTRO};
+        mv.addObject("generos", generos);
+        return mv;
     }
 
 }

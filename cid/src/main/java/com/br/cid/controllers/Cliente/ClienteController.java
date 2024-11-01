@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.br.cid.enums.Genero;
 import com.br.cid.model.Cliente;
 import com.br.cid.model.dto.EnderecoRequest;
 import com.br.cid.service.ClienteService;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -23,13 +23,9 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @RequestMapping("/cadastro")
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Cliente cliente) {
-        ModelAndView mv = new ModelAndView("cliente/cadastro");
-        mv.addObject("cliente", new Cliente());
-        Genero[] generos = {Genero.MASCULINO, Genero.FEMININO, Genero.OUTRO};
-        mv.addObject("generos", generos);
-        return mv;
+       return clienteService.Cadastro(cliente);
     }
 
     @PostMapping("/cadastro-cliente")
