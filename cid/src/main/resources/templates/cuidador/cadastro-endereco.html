@@ -26,32 +26,6 @@
 
         <button type="submit">Cadastrar Endereço</button>
     </form>
-
-    <script>
-        function buscarCEP() {
-            const cep = document.getElementById('cep').value;
-            if (cep.length !== 8) {
-                alert('CEP inválido');
-                return;
-            }
-
-            fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.erro) {
-                        alert('CEP não encontrado');
-                        return;
-                    }
-                    document.getElementById('uf').value = data.uf;
-                    document.getElementById('estado').value = data.uf; // ou data.estado se disponível
-                    document.getElementById('localidade').value = data.localidade;
-                    document.getElementById('bairro').value = data.bairro;
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar o CEP:', error);
-                    alert('Erro ao buscar o CEP');
-                });
-        }
-    </script>
+    <script th:replace="fragments/buscarCep :: buscaCepImports"></script>
 </body>
 </html>

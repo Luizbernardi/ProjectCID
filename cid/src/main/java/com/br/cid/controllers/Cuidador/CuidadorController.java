@@ -6,12 +6,9 @@ import org.springframework.ui.Model;
 
 import com.br.cid.enums.Genero;
 import com.br.cid.model.Cuidador;
-import com.br.cid.model.Endereco;
 import com.br.cid.model.dto.EnderecoRequest;
-import com.br.cid.repository.CuidadorRepository;
 import com.br.cid.service.CuidadorService;
-import com.br.cid.service.EnderecoService;
-import com.br.cid.util.UploadImagem;
+
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,12 +26,6 @@ public class CuidadorController {
     
     @Autowired
     private CuidadorService cuidadorService;
-    
-    @Autowired
-    private CuidadorRepository cuidadorRepository;
-
-    @Autowired 
-    private EnderecoService enderecoService;
 
     @GetMapping("/cadastro")
     public ModelAndView cadastro(Cuidador cuidador) {
@@ -52,68 +43,13 @@ public class CuidadorController {
 
     @PostMapping("/cadastro-cuidador")
     public ModelAndView cadastrarCuidador(@ModelAttribute Cuidador cuidador, @RequestParam("file") MultipartFile imagem) {
-        //criando a view de cadastro
-        ModelAndView mv = new ModelAndView("cuidador/cadastro");
-        //criando o objeto cuidador para ser passado para a view
-        mv.addObject("cuidador", cuidador);
+        return cuidadorService.salvarCuidadorComImagem(cuidador, imagem);
+    }
 
-        //fazendo tratamento de exceção da imagem
-        try {
-            //verificando se a imagem foi enviada
-            if (UploadImagem.fazerUploadImagem(imagem)) {
-                cuidador.setImagem("static/images/imagem-uploads" + imagem.getOriginalFilename());
-            }
-            //caso a imagem não tenha sido enviada, será setada uma imagem padrão 
-            else {
-                cuidador.setImagem("static/images/imagem-uploads/imagem-default.jpg");
-            }
-            //salvando o cuidador
-            Cuidador CuidadorSalvo = cuidadorRepository.save(cuidador);
-            //criando a view de cadastro de endereço
-            ModelAndView mvEndereco = new ModelAndView("cuidador/cadastro-endereco");
-            //passando o id do cuidador para a view
-            mvEndereco.addObject("cuidadorId", CuidadorSalvo.getId());
-            //criando o objeto endereco para ser passado para a view
-            mvEndereco.addObject("endereco", new EnderecoRequest());
-            //retornando a view
-            return mvEndereco;
-        } catch (Exception e) {
-            //caso ocorra um erro, será passado uma mensagem de erro para a view
-            mv.addObject("msgError", e.getMessage());
-            //retornando a view
-            System.out.println("error ao salvar cuidador" + e.getMessage());
-            return mv;
-        }
-}
-@PostMapping("/cadastro-endereco")
-public ModelAndView CadastrarEndereco(@ModelAttribute EnderecoRequest enderecoRequest, @RequestParam("cuidadorId") Long cuidadorId, Model model) {
-    //criando a view de cadastro
-    ModelAndView mv = new ModelAndView("cuidador/cadastro-endereco");
-    //criando o objeto endereco para ser passado para a view
-    mv.addObject("endereco", enderecoRequest);
-    
-    try {
-        //salvando o endereco
-        Endereco endereco = enderecoService.executa(enderecoRequest);
-        //buscando o cuidador pelo id
-        Cuidador cuidador = cuidadorRepository.findById(cuidadorId).orElseThrow(() -> new IllegalArgumentException("Cuidador não encontrado"));
-        //setando o endereco no cuidador
-        cuidador.setEndereco(endereco);
-        //salvando o cuidador
-        cuidadorRepository.save(cuidador);
-        //retornando a view
-        model.addAttribute("endereco", endereco);
-        System.out.println("endereco Salvo com sucesso" + enderecoRequest.getCep());
-        //redirect para a pagina de login
-        return new ModelAndView("redirect:/login");
-    } catch (Exception e) {
-        //caso ocorra um erro, será passado uma mensagem de erro para a view
-        mv.addObject("msgError", e.getMessage());
-        //retornando a view
-        System.out.println("error ao salvar endereco" + e.getMessage());
-        return mv;
+    @PostMapping("/cadastro-endereco")
+    public ModelAndView CadastrarEndereco(@ModelAttribute EnderecoRequest enderecoRequest, @RequestParam("cuidadorId") Long cuidadorId, Model model) {
+        return cuidadorService.salvarEnderecoParaCuidador(enderecoRequest, cuidadorId, model);
     }
 }
 
 
-}
