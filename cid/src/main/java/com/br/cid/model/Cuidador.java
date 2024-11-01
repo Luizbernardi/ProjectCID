@@ -15,7 +15,7 @@ import jakarta.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Cuidador {
+public class Cuidador extends User {
 
     @Enumerated(EnumType.STRING)
     private Perfil perfil = Perfil.CUIDADOR;

@@ -6,5 +6,5 @@ import com.br.cid.model.Endereco;
 
 @Repository
 public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
-    
+    Endereco findByCep(String cep);
 }

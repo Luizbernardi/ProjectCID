@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Cliente {
+public class Cliente extends User {
     
     @Enumerated(EnumType.STRING)
     private Perfil perfil = Perfil.CLIENTE;
