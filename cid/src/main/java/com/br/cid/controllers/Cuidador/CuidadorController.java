@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 
 
 
@@ -43,7 +41,7 @@ public class CuidadorController {
         //criando a view de cadastro 
         ModelAndView mv = new ModelAndView("cuidador/cadastro");
         //criando o objeto cuidador para ser passado para a view
-        mv.addObject("cuidador", cuidador);
+        mv.addObject("cuidador", new Cuidador());
         //criando um array de generos para ser passado para a view
         Genero[] generos = {Genero.MASCULINO, Genero.FEMININO, Genero.OUTRO};
         //passando o array de generos para a view
@@ -108,7 +106,6 @@ public ModelAndView CadastrarEndereco(@ModelAttribute EnderecoRequest enderecoRe
         System.out.println("endereco Salvo com sucesso" + enderecoRequest.getCep());
         //redirect para a pagina de login
         return new ModelAndView("redirect:/login");
-        
     } catch (Exception e) {
         //caso ocorra um erro, será passado uma mensagem de erro para a view
         mv.addObject("msgError", e.getMessage());

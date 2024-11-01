@@ -34,6 +34,12 @@ public class Endereco {
     private String bairro;
     
     @OneToMany(mappedBy = "endereco")
-    private List<User> users;
+    private List<Cuidador> cuidador;
+
+    @OneToMany(mappedBy = "endereco")
+    private List<Cliente> cliente;
+
+    @OneToMany(mappedBy = "endereco")
+    private List<Admin> admin;
     
 }
