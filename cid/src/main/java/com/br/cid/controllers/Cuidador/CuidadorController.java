@@ -95,12 +95,18 @@ public ModelAndView CadastrarEndereco(@ModelAttribute EnderecoRequest enderecoRe
     mv.addObject("endereco", enderecoRequest);
     
     try {
+        //salvando o endereco
         Endereco endereco = enderecoService.executa(enderecoRequest);
+        //buscando o cuidador pelo id
         Cuidador cuidador = cuidadorRepository.findById(cuidadorId).orElseThrow(() -> new IllegalArgumentException("Cuidador não encontrado"));
+        //setando o endereco no cuidador
         cuidador.setEndereco(endereco);
+        //salvando o cuidador
         cuidadorRepository.save(cuidador);
+        //retornando a view
         model.addAttribute("endereco", endereco);
         System.out.println("endereco Salvo com sucesso" + enderecoRequest.getCep());
+        //redirect para a pagina de login
         return new ModelAndView("redirect:/login");
         
     } catch (Exception e) {
@@ -110,8 +116,7 @@ public ModelAndView CadastrarEndereco(@ModelAttribute EnderecoRequest enderecoRe
         System.out.println("error ao salvar endereco" + e.getMessage());
         return mv;
     }
-    
-    
 }
+
 
 }
